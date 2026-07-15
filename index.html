@@ -63,6 +63,33 @@ body::after {
   z-index: 9998;
 }
 
+/* ===== Floating particles ===== */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(1px);
+  animation: floatUp 15s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+  10% { opacity: 0.6; transform: translateY(90vh) translateX(20px) scale(1); }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-10vh) translateX(-30px) scale(0.5); opacity: 0; }
+}
+
 /* ===== Preloader ===== */
 .preloader {
   position: fixed;
@@ -258,7 +285,6 @@ body::after {
 .audio-control.playing .icon-play { display: none; }
 .audio-control.playing .icon-pause { display: block; }
 
-/* Equalizer animation when playing */
 .audio-control.playing::after {
   content: '';
   position: absolute;
@@ -401,88 +427,465 @@ section {
   margin: 0 auto;
 }
 
-/* ===== Act 1 ===== */
-.act-one {
+/* ===== Mother Tribute Section (Opening) ===== */
+.mother-tribute {
   background: 
-    radial-gradient(ellipse at top, rgba(139, 58, 58, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 50%, rgba(139, 58, 58, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 50%, rgba(212, 165, 116, 0.06) 0%, transparent 60%),
     linear-gradient(180deg, #0a0608 0%, #120709 50%, #0a0608 100%);
-}
-
-.content-wrapper {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* Masonry gallery */
-.masonry-gallery {
-  column-count: 3;
-  column-gap: 1rem;
-  margin: 4rem 0;
-}
-
-.masonry-item {
-  break-inside: avoid;
-  margin-bottom: 1rem;
-  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  border-radius: 3px;
-  cursor: pointer;
-  background: var(--bg-card);
 }
 
-.masonry-item img {
+.mother-tribute::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.04) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  animation: breathe 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.mother-tribute-wrapper {
+  max-width: 1300px;
   width: 100%;
-  height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 5rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.mother-image-container {
+  position: relative;
+  perspective: 1000px;
+}
+
+.mother-image-frame {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px var(--border-warm),
+    0 0 60px rgba(212, 165, 116, 0.1);
+  transform-style: preserve-3d;
+  animation: gentleFloat 6s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+  33% { transform: translateY(-10px) rotateX(1deg) rotateY(-1deg); }
+  66% { transform: translateY(5px) rotateX(-1deg) rotateY(1deg); }
+}
+
+.mother-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              filter 0.8s ease,
-              opacity 0.8s ease;
-  filter: brightness(0.82) saturate(0.85) contrast(1.05);
+  filter: brightness(0.9) saturate(0.9) contrast(1.05);
+  animation: kenBurns 20s ease-in-out infinite alternate;
 }
 
-.masonry-item:hover img {
-  transform: scale(1.06);
-  filter: brightness(1) saturate(1.1) contrast(1);
+@keyframes kenBurns {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.1) translate(-2%, -2%); }
 }
 
-.masonry-gallery:hover .masonry-item:not(:hover) img {
-  opacity: 0.45;
-  filter: brightness(0.4) saturate(0.5);
-}
-
-.masonry-item::after {
+.mother-image-frame::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(10,6,8,0.7) 100%);
+  background: linear-gradient(180deg, transparent 60%, rgba(10, 6, 8, 0.5) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mother-image-frame::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--accent-gold);
+  border-radius: 4px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.mother-image-glow {
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.15) 0%, transparent 70%);
+  z-index: -1;
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.mother-image-label {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-style: italic;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.mother-text-content {
+  position: relative;
+}
+
+.mother-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  display: inline-block;
+  position: relative;
+}
+
+.mother-eyebrow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-right: 1rem;
+  width: 40px;
+  height: 1px;
+  background: var(--accent-gold);
+  opacity: 0.4;
+}
+
+.mother-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.mother-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.15em;
+  font-style: italic;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.mother-divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-gold), transparent);
+  margin-bottom: 2rem;
+}
+
+.mother-writeup {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  line-height: 1.9;
+  color: var(--text-soft);
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+.mother-writeup:first-of-type {
+  font-size: 1.35rem;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+.mother-writeup .accent {
+  color: var(--accent-gold);
+  font-style: italic;
+}
+
+.mother-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--accent-gold);
+  line-height: 1.5;
+  padding: 1.5rem 0;
+  border-left: 2px solid var(--accent-gold);
+  padding-left: 2rem;
+  margin: 2rem 0;
+  opacity: 0.9;
+}
+
+.mother-signature {
+  margin-top: 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+/* ===== Horizontal Slideshow ===== */
+.slideshow-container {
+  position: relative;
+  max-width: 1400px;
+  margin: 4rem auto;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+.slideshow-viewport {
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+}
+
+.slideshow-track {
+  display: flex;
+  gap: 1.5rem;
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+  cursor: grab;
+}
+
+.slideshow-track:active { cursor: grabbing; }
+
+.slide-item {
+  flex: 0 0 auto;
+  width: 380px;
+  aspect-ratio: 3 / 4;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  transition: border-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.slide-item:hover {
+  border-color: var(--border-warm);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 165, 116, 0.1);
+}
+
+.slide-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.82) saturate(0.85) contrast(1.05);
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 0.8s ease;
+}
+
+.slide-item:hover img {
+  transform: scale(1.08);
+  filter: brightness(1) saturate(1.1) contrast(1);
+}
+
+.slideshow-container:hover .slide-item:not(:hover) img {
+  opacity: 0.5;
+  filter: brightness(0.4) saturate(0.5);
+}
+
+.slide-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,6,8,0.8) 100%);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-.masonry-item:hover::after { opacity: 1; }
+.slide-item:hover::after { opacity: 1; }
 
-.masonry-item .item-tag {
+.slide-tag {
   position: absolute;
-  bottom: 1rem;
-  left: 1rem;
+  bottom: 1.5rem;
+  left: 1.5rem;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--text-primary);
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(15px);
   transition: all 0.5s ease;
   z-index: 2;
 }
 
-.masonry-item:hover .item-tag {
+.slide-item:hover .slide-tag {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Love letter text */
+.slide-number {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--accent-gold);
+  opacity: 0;
+  transform: translateX(15px);
+  transition: all 0.5s ease;
+  z-index: 2;
+  font-style: italic;
+}
+
+.slide-item:hover .slide-number {
+  opacity: 0.8;
+  transform: translateX(0);
+}
+
+/* Slideshow navigation */
+.slideshow-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.nav-arrow {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--border-warm);
+  background: rgba(10, 6, 8, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-arrow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gold);
+  transform: scale(0);
+  border-radius: 50%;
+  transition: transform 0.4s ease;
+}
+
+.nav-arrow:hover {
+  border-color: var(--accent-gold);
+  transform: scale(1.1);
+}
+
+.nav-arrow:hover::before { transform: scale(1); }
+
+.nav-arrow svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--text-primary);
+  transition: fill 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-arrow:hover svg { fill: var(--bg-deep); }
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+.nav-arrow:disabled:hover::before { transform: scale(0); }
+
+.slideshow-dots {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.slide-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.slide-dot.active {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  transform: scale(1.3);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.slide-counter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3em;
+  font-style: italic;
+  min-width: 60px;
+  text-align: center;
+}
+
+.slide-counter .current {
+  color: var(--accent-gold);
+  font-size: 1.1rem;
+}
+
+/* Slideshow progress line */
+.slideshow-progress {
+  position: relative;
+  width: 200px;
+  height: 1px;
+  background: var(--border-soft);
+  margin: 1.5rem auto 0;
+  overflow: hidden;
+}
+
+.slideshow-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-wine), var(--accent-gold));
+  transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ===== Love letter text ===== */
 .love-letter {
   max-width: 720px;
   margin: 0 auto;
@@ -549,6 +952,18 @@ section {
   background: var(--accent-gold);
   margin: 2rem auto 0;
   opacity: 0.4;
+}
+
+/* ===== Act sections ===== */
+.act-one {
+  background: 
+    radial-gradient(ellipse at top, rgba(139, 58, 58, 0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0608 0%, #120709 50%, #0a0608 100%);
+}
+
+.content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* ===== Act 2 ===== */
@@ -750,7 +1165,6 @@ section {
   padding: 10rem 2rem;
 }
 
-/* Starfield */
 .act-three .stars {
   position: absolute;
   inset: 0;
@@ -951,17 +1365,30 @@ section {
   opacity: 0;
 }
 
+/* ===== Text reveal animation ===== */
+.word-reveal {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(8px);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
-  .masonry-gallery { column-count: 2; }
+  .mother-tribute-wrapper { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+  .mother-eyebrow::before { display: none; }
+  .mother-divider { margin: 2rem auto; }
+  .mother-quote { text-align: left; }
   .video-grid { grid-template-columns: repeat(2, 1fr); }
   .act-two-content { grid-template-columns: 1fr; gap: 2rem; }
   .progress-rail { display: none; }
+  .slide-item { width: 320px; }
 }
 
 @media (max-width: 640px) {
   section { padding: 5rem 1.25rem; }
-  .masonry-gallery { column-count: 1; }
+  .mother-tribute-wrapper { gap: 2.5rem; }
+  .mother-image-frame { max-width: 320px; }
   .video-grid { grid-template-columns: 1fr; }
   .video-card { aspect-ratio: 4 / 5; }
   .letter-paragraph { font-size: 1.15rem; line-height: 1.8; }
@@ -972,9 +1399,11 @@ section {
   .section-header { margin-bottom: 3rem; }
   .pull-quote { font-size: 1.3rem; padding: 2rem 0; }
   .act-two-text .letter-paragraph { font-size: 1.1rem; }
+  .slide-item { width: 260px; }
+  .slideshow-nav { gap: 1rem; }
+  .nav-arrow { width: 44px; height: 44px; }
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -985,6 +1414,9 @@ section {
 </style>
 </head>
 <body class="no-scroll">
+
+<!-- ===== Floating particles ===== -->
+<div class="particles" id="particles"></div>
 
 <!-- ===== Scroll progress bar ===== -->
 <div class="scroll-bar" id="scrollBar"></div>
@@ -1004,7 +1436,6 @@ section {
 
 <!-- ===== Audio ===== -->
 <audio id="bgAudio" loop preload="auto">
-  <!-- Replace this source with your preferred romantic track -->
   <source src="audio.mp3" type="audio/mpeg">
 </audio>
 
@@ -1016,33 +1447,124 @@ section {
 
 <!-- ===== Progress rail ===== -->
 <div class="progress-rail" id="progressRail">
-  <div class="progress-dot active" data-section="0" data-label="Act One — Celebration"></div>
-  <div class="progress-dot" data-section="1" data-label="Act Two — The Real Him"></div>
-  <div class="progress-dot" data-section="2" data-label="Act Three — Eternal Love"></div>
+  <div class="progress-dot active" data-section="0" data-label="A Mother's Love"></div>
+  <div class="progress-dot" data-section="1" data-label="Act One — Celebration"></div>
+  <div class="progress-dot" data-section="2" data-label="Act Two — The Real Him"></div>
+  <div class="progress-dot" data-section="3" data-label="Act Three — Eternal Love"></div>
 </div>
 
 <!-- ===== Main content ===== -->
 <main class="main-content" id="mainContent">
 
   <!-- ============================================ -->
-  <!-- ACT 1: THE CELEBRATION                       -->
+  <!-- MOTHER TRIBUTE (Opening Section)              -->
+  <!-- ============================================ -->
+  <section class="mother-tribute" id="motherTribute">
+    <div class="mother-tribute-wrapper">
+      <!-- Mother's Image -->
+      <div class="mother-image-container">
+        <div class="mother-image-glow"></div>
+        <div class="mother-image-frame">
+          <!-- Replace 'mother.jpg' with the actual image of his mother -->
+          <img src="image11.jpg" alt="Mother" loading="eager">
+        </div>
+        <p class="mother-image-label">Forever in our hearts</p>
+      </div>
+
+      <!-- Mother's Write-up -->
+      <div class="mother-text-content">
+        <p class="mother-eyebrow fade-in">In Loving Memory</p>
+        <h2 class="mother-title fade-in">A Mother's Love</h2>
+        <p class="mother-name fade-in">Matero's Mother</p>
+        <div class="mother-divider fade-in"></div>
+
+        <p class="mother-writeup fade-in">Before the celebration begins, before the words of love and the memories we hold dear, there is a love that came before all others — the love of a mother.</p>
+
+        <p class="mother-writeup fade-in">She was the first to hold him, the first to believe in him, and the first to see the man he would become. Though heaven called her home, her love never left. It lives on in every smile, every victory, and every step he takes.</p>
+
+        <div class="mother-quote fade-in">
+          "A mother's love doesn't end with goodbye. It simply finds a new way to stay."
+        </div>
+
+        <p class="mother-writeup fade-in">Today, as we celebrate <span class="accent">Swag</span>, we honor the woman whose love made him who he is. Her prayers still cover him, her strength still flows through him, and her memory still lights his way.</p>
+
+        <p class="mother-signature fade-in">With love that transcends time</p>
+      </div>
+    </div>
+  </section>
+    <!-- ============================================ -->
+  <!-- ACT 3: ETERNAL LOVE                            -->
+  <!-- ============================================ -->
+  <section class="act-three" id="act3">
+    <div class="stars"></div>
+    <div class="act-three-glow"></div>
+
+    <div class="eternal-letter">
+      <div class="eternal-header fade-in">
+        <p class="eternal-subtitle">Act One</p>
+        <h2 class="eternal-title">Eternal Love</h2>
+        <div class="eternal-divider"></div>
+      </div>
+
+      <p class="stanza fade-in">My dearest son, Matero Jude Adurojaye.</p>
+
+      <p class="stanza fade-in">If heaven could grant me just one moment with you today, I wouldn't spend it talking about the years we've lost. I'd spend it reminding you how deeply you are loved.</p>
+
+      <p class="stanza emphasis fade-in">Happy birthday, my son.</p>
+
+      <p class="stanza fade-in">I have watched you grow through every smile, every tear, every victory, and every battle. Even when you couldn't see me, my love has never stopped surrounding you.</p>
+
+      <p class="stanza fade-in">My prayer for you is simple: May God go before you in every step you take. May He protect you from harm, guide every decision you make, and bless the work of your hands.</p>
+
+      <p class="stanza fade-in">May your heart never lose its kindness, your faith never grow weak, and your light never be dimmed by the hardships of life.</p>
+
+      <p class="stanza emphasis fade-in">When you feel lonely, may you remember that love never dies. It simply changes its home. Mine now lives in heaven, but it will always find its way back to you.</p>
+
+      <p class="stanza fade-in">May doors open where others see walls. May you laugh more than you cry, celebrate more than you worry, and find peace even in life's storms.</p>
+
+      <p class="stanza fade-in">I pray that the dreams you carry become your reality, that God surrounds you with people who genuinely love you, and that He gives you a long, healthy, and beautiful life.</p>
+
+      <p class="stanza fade-in">And whenever you miss me, don't let your heart be filled only with tears. Smile, because being your mother will always be one of my greatest blessings.</p>
+
+      <p class="stanza emphasis fade-in">Happy birthday, my precious son. May the Lord continue to keep you, strengthen you, and remind you every day that you are deeply loved.</p>
+
+      <div class="eternal-signature fade-in">
+        <p class="signature-name">With a mother's endless love,</p>
+        <p class="signature-tag">Forever watching over you</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- ACT 1: THE CELEBRATION                        -->
   <!-- ============================================ -->
   <section class="act-one" id="act1">
     <div class="content-wrapper">
       <div class="section-header">
-        <p class="section-eyebrow fade-in">Act One</p>
+        <p class="section-eyebrow fade-in">Act Two</p>
         <h2 class="section-title fade-in">The Celebration</h2>
         <p class="section-intro fade-in">For the one who makes every ordinary moment feel like cinema.</p>
       </div>
 
-      <!-- Masonry batch 1 -->
-      <div class="masonry-gallery">
-        <div class="masonry-item reveal-item"><img src="image.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 01</span></div>
-        <div class="masonry-item reveal-item"><img src="image17.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 02</span></div>
-        <div class="masonry-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 03</span></div>
-        <div class="masonry-item reveal-item"><img src="image12.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 04</span></div>
-        <div class="masonry-item reveal-item"><img src="image13.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 05</span></div>
-        <div class="masonry-item reveal-item"><img src="image14.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 06</span></div>
+      <!-- Slideshow 1 -->
+      <div class="slideshow-container" data-slideshow="0">
+        <div class="slideshow-viewport">
+          <div class="slideshow-track">
+            <div class="slide-item reveal-item"><img src="image.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 01</span><span class="slide-number">01</span></div>
+            <div class="slide-item reveal-item"><img src="image17.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 02</span><span class="slide-number">02</span></div>
+            <div class="slide-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 03</span><span class="slide-number">03</span></div>
+            <div class="slide-item reveal-item"><img src="image12.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 04</span><span class="slide-number">04</span></div>
+            <div class="slide-item reveal-item"><img src="image13.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 05</span><span class="slide-number">05</span></div>
+            <div class="slide-item reveal-item"><img src="image14.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 06</span><span class="slide-number">06</span></div>
+          </div>
+        </div>
+        <div class="slideshow-nav">
+          <button class="nav-arrow nav-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+          <div class="slideshow-dots"></div>
+          <button class="nav-arrow nav-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+        </div>
+        <div class="slide-counter"><span class="current">01</span> / <span class="total">06</span></div>
+        <div class="slideshow-progress"><div class="slideshow-progress-fill"></div></div>
       </div>
 
       <!-- Letter part 1 -->
@@ -1058,14 +1580,25 @@ section {
         <p class="letter-paragraph fade-in">Those are some of my favorite memories, and they're moments I'll always cherish.</p>
       </div>
 
-      <!-- Masonry batch 2 -->
-      <div class="masonry-gallery">
-        <div class="masonry-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 07</span></div>
-        <div class="masonry-item reveal-item"><img src="image111.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 08</span></div>
-        <div class="masonry-item reveal-item"><img src="image112.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 09</span></div>
-        <div class="masonry-item reveal-item"><img src="image113.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 10</span></div>
-        <div class="masonry-item reveal-item"><img src="image114.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 11</span></div>
-        <div class="masonry-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 12</span></div>
+      <!-- Slideshow 2 -->
+      <div class="slideshow-container" data-slideshow="1">
+        <div class="slideshow-viewport">
+          <div class="slideshow-track">
+            <div class="slide-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 07</span><span class="slide-number">07</span></div>
+            <div class="slide-item reveal-item"><img src="image111.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 08</span><span class="slide-number">08</span></div>
+            <div class="slide-item reveal-item"><img src="image112.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 09</span><span class="slide-number">09</span></div>
+            <div class="slide-item reveal-item"><img src="image113.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 10</span><span class="slide-number">10</span></div>
+            <div class="slide-item reveal-item"><img src="image114.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 11</span><span class="slide-number">11</span></div>
+            <div class="slide-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 12</span><span class="slide-number">12</span></div>
+          </div>
+        </div>
+        <div class="slideshow-nav">
+          <button class="nav-arrow nav-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+          <div class="slideshow-dots"></div>
+          <button class="nav-arrow nav-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+        </div>
+        <div class="slide-counter"><span class="current">01</span> / <span class="total">06</span></div>
+        <div class="slideshow-progress"><div class="slideshow-progress-fill"></div></div>
       </div>
 
       <!-- Letter part 2 -->
@@ -1088,26 +1621,37 @@ section {
         <p class="letter-paragraph fade-in">I love you, and I'll always be rooting for you. Happy Birthday, my very own albino. <span class="accent">😂 ❤️🎂</span></p>
       </div>
 
-      <!-- Masonry batch 3 -->
-      <div class="masonry-gallery">
-        <div class="masonry-item reveal-item"><img src="image10.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 13</span></div>
-        <div class="masonry-item reveal-item"><img src="image15.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 14</span></div>
-        <div class="masonry-item reveal-item"><img src="image16.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 15</span></div>
-        <div class="masonry-item reveal-item"><img src="image18.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 16</span></div>
-        <div class="masonry-item reveal-item"><img src="image19.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 17</span></div>
-        <div class="masonry-item reveal-item"><img src="image13.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 18</span></div>
-        <div class="masonry-item reveal-item"><img src="image17.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 19</span></div>
-        <div class="masonry-item reveal-item"><img src="image.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 20</span></div>
+      <!-- Slideshow 3 -->
+      <div class="slideshow-container" data-slideshow="2">
+        <div class="slideshow-viewport">
+          <div class="slideshow-track">
+            <div class="slide-item reveal-item"><img src="image10.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 13</span><span class="slide-number">13</span></div>
+            <div class="slide-item reveal-item"><img src="image15.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 14</span><span class="slide-number">14</span></div>
+            <div class="slide-item reveal-item"><img src="image16.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 15</span><span class="slide-number">15</span></div>
+            <div class="slide-item reveal-item"><img src="image18.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 16</span><span class="slide-number">16</span></div>
+            <div class="slide-item reveal-item"><img src="image19.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 17</span><span class="slide-number">17</span></div>
+            <div class="slide-item reveal-item"><img src="image13.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 18</span><span class="slide-number">18</span></div>
+            <div class="slide-item reveal-item"><img src="image17.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 19</span><span class="slide-number">19</span></div>
+            <div class="slide-item reveal-item"><img src="image.jpg" alt="Memory" loading="lazy"><span class="slide-tag">Us, 20</span><span class="slide-number">20</span></div>
+          </div>
+        </div>
+        <div class="slideshow-nav">
+          <button class="nav-arrow nav-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+          <div class="slideshow-dots"></div>
+          <button class="nav-arrow nav-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+        </div>
+        <div class="slide-counter"><span class="current">01</span> / <span class="total">08</span></div>
+        <div class="slideshow-progress"><div class="slideshow-progress-fill"></div></div>
       </div>
     </div>
   </section>
 
   <!-- ============================================ -->
-  <!-- ACT 2: THE REAL HIM                          -->
+  <!-- ACT 2: THE REAL HIM                            -->
   <!-- ============================================ -->
   <section class="act-two" id="act2">
     <div class="section-header">
-      <p class="section-eyebrow fade-in">Act Two</p>
+      <p class="section-eyebrow fade-in">Act Three</p>
       <h2 class="section-title fade-in">The Real Him</h2>
       <p class="section-intro fade-in">Beneath the surface, beyond the name — the man only a few get to truly know.</p>
     </div>
@@ -1221,49 +1765,7 @@ section {
     </div>
   </section>
 
-  <!-- ============================================ -->
-  <!-- ACT 3: ETERNAL LOVE                          -->
-  <!-- ============================================ -->
-  <section class="act-three" id="act3">
-    <div class="stars"></div>
-    <div class="act-three-glow"></div>
-
-    <div class="eternal-letter">
-      <div class="eternal-header fade-in">
-        <p class="eternal-subtitle">Act Three</p>
-        <h2 class="eternal-title">Eternal Love</h2>
-        <div class="eternal-divider"></div>
-      </div>
-
-      <p class="stanza fade-in">My dearest son, Matero Jude Adurojaye.</p>
-
-      <p class="stanza fade-in">If heaven could grant me just one moment with you today, I wouldn't spend it talking about the years we've lost. I'd spend it reminding you how deeply you are loved.</p>
-
-      <p class="stanza emphasis fade-in">Happy birthday, my son.</p>
-
-      <p class="stanza fade-in">I have watched you grow through every smile, every tear, every victory, and every battle. Even when you couldn't see me, my love has never stopped surrounding you.</p>
-
-      <p class="stanza fade-in">My prayer for you is simple: May God go before you in every step you take. May He protect you from harm, guide every decision you make, and bless the work of your hands.</p>
-
-      <p class="stanza fade-in">May your heart never lose its kindness, your faith never grow weak, and your light never be dimmed by the hardships of life.</p>
-
-      <p class="stanza emphasis fade-in">When you feel lonely, may you remember that love never dies. It simply changes its home. Mine now lives in heaven, but it will always find its way back to you.</p>
-
-      <p class="stanza fade-in">May doors open where others see walls. May you laugh more than you cry, celebrate more than you worry, and find peace even in life's storms.</p>
-
-      <p class="stanza fade-in">I pray that the dreams you carry become your reality, that God surrounds you with people who genuinely love you, and that He gives you a long, healthy, and beautiful life.</p>
-
-      <p class="stanza fade-in">And whenever you miss me, don't let your heart be filled only with tears. Smile, because being your mother will always be one of my greatest blessings.</p>
-
-      <p class="stanza emphasis fade-in">Happy birthday, my precious son. May the Lord continue to keep you, strengthen you, and remind you every day that you are deeply loved.</p>
-
-      <div class="eternal-signature fade-in">
-        <p class="signature-name">With a mother's endless love,</p>
-        <p class="signature-tag">Forever watching over you</p>
-      </div>
-    </div>
-  </section>
-
+  
   <!-- ===== Footer ===== -->
   <footer class="site-footer">
     <p class="footer-text">Crafted frame by frame, with love <span class="footer-heart">❤</span> For Swag</p>
@@ -1287,6 +1789,24 @@ const progressDots = document.querySelectorAll('.progress-dot');
 const scrollBar = document.getElementById('scrollBar');
 
 // ============================================
+// CREATE FLOATING PARTICLES
+// ============================================
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 15 + 's';
+    particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+    particle.style.width = (2 + Math.random() * 3) + 'px';
+    particle.style.height = particle.style.width;
+    container.appendChild(particle);
+  }
+}
+createParticles();
+
+// ============================================
 // PRELOADER ENTRANCE ANIMATION
 // ============================================
 const tl = gsap.timeline({ delay: 0.3 });
@@ -1300,7 +1820,6 @@ tl.from('.preloader-eyebrow', { opacity: 0, y: 20, duration: 1, ease: 'power2.ou
 // ENTER BUTTON HANDLER
 // ============================================
 enterBtn.addEventListener('click', () => {
-  // Fade out preloader
   gsap.to(preloader, {
     opacity: 0,
     duration: 1.5,
@@ -1314,7 +1833,6 @@ enterBtn.addEventListener('click', () => {
     }
   });
 
-  // Play audio with fade-in
   bgAudio.volume = 0;
   const playPromise = bgAudio.play();
   if (playPromise !== undefined) {
@@ -1328,7 +1846,6 @@ enterBtn.addEventListener('click', () => {
   audioControl.classList.add('visible');
   progressRail.classList.add('visible');
 
-  // Reveal main content
   gsap.to(mainContent, {
     opacity: 1,
     duration: 2,
@@ -1336,7 +1853,6 @@ enterBtn.addEventListener('click', () => {
     delay: 0.4
   });
 
-  // Initialize scroll animations after content is visible
   setTimeout(initScrollAnimations, 600);
 });
 
@@ -1377,7 +1893,6 @@ document.querySelectorAll('.video-card').forEach(card => {
   const closeBtn = card.querySelector('.video-close');
 
   function playVideo() {
-    // Pause all other videos
     document.querySelectorAll('.video-card').forEach(other => {
       if (other !== card) {
         const v = other.querySelector('video');
@@ -1398,7 +1913,6 @@ document.querySelectorAll('.video-card').forEach(card => {
   }
 
   card.addEventListener('click', (e) => {
-    // If clicking close button, handle separately
     if (e.target.closest('.video-close')) {
       e.stopPropagation();
       pauseVideo();
@@ -1418,11 +1932,220 @@ document.querySelectorAll('.video-card').forEach(card => {
 });
 
 // ============================================
+// HORIZONTAL SLIDESHOW FUNCTIONALITY
+// ============================================
+function initSlideshow(container) {
+  const track = container.querySelector('.slideshow-track');
+  const slides = Array.from(track.querySelectorAll('.slide-item'));
+  const prevBtn = container.querySelector('.nav-prev');
+  const nextBtn = container.querySelector('.nav-next');
+  const dotsContainer = container.querySelector('.slideshow-dots');
+  const counter = container.querySelector('.slide-counter .current');
+  const totalEl = container.querySelector('.slide-counter .total');
+  const progressFill = container.querySelector('.slideshow-progress-fill');
+
+  let currentIndex = 0;
+  let slidesToShow = getSlidesToShow();
+  let maxIndex = Math.max(0, slides.length - slidesToShow);
+  let isDragging = false;
+  let startX = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+
+  totalEl.textContent = String(slides.length).padStart(2, '0');
+
+  // Create dots
+  function createDots() {
+    dotsContainer.innerHTML = '';
+    const dotCount = maxIndex + 1;
+    for (let i = 0; i < dotCount; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function getSlidesToShow() {
+    const width = window.innerWidth;
+    if (width <= 640) return 1;
+    if (width <= 1024) return 2;
+    return 3;
+  }
+
+  function updateSlideshow() {
+    const slideWidth = slides[0].offsetWidth;
+    const gap = 24; // 1.5rem gap
+    const offset = currentIndex * (slideWidth + gap);
+    
+    gsap.to(track, {
+      x: -offset,
+      duration: 0.8,
+      ease: 'power3.out'
+    });
+
+    // Update dots
+    const dots = dotsContainer.querySelectorAll('.slide-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+
+    // Update counter
+    counter.textContent = String(currentIndex + 1).padStart(2, '0');
+
+    // Update progress
+    const progress = maxIndex > 0 ? (currentIndex / maxIndex) * 100 : 0;
+    progressFill.style.width = progress + '%';
+
+    // Update button states
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex >= maxIndex;
+  }
+
+  function goToSlide(index) {
+    currentIndex = Math.max(0, Math.min(index, maxIndex));
+    updateSlideshow();
+  }
+
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSlideshow();
+    }
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlideshow();
+    }
+  }
+
+  // Button events
+  nextBtn.addEventListener('click', nextSlide);
+  prevBtn.addEventListener('click', prevSlide);
+
+  // Touch/drag events
+  track.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    prevTranslate = -currentIndex * (slides[0].offsetWidth + 24);
+  });
+
+  track.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const currentX = e.touches[0].clientX;
+    const diff = currentX - startX;
+    currentTranslate = prevTranslate + diff;
+    track.style.transform = `translateX(${currentTranslate}px)`;
+    track.style.transition = 'none';
+  });
+
+  track.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    track.style.transition = '';
+    
+    const slideWidth = slides[0].offsetWidth + 24;
+    const moved = currentTranslate - prevTranslate;
+    
+    if (moved < -slideWidth / 3 && currentIndex < maxIndex) {
+      currentIndex++;
+    } else if (moved > slideWidth / 3 && currentIndex > 0) {
+      currentIndex--;
+    }
+    
+    updateSlideshow();
+  });
+
+  // Mouse drag
+  track.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    prevTranslate = -currentIndex * (slides[0].offsetWidth + 24);
+    e.preventDefault();
+  });
+
+  track.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const currentX = e.clientX;
+    const diff = currentX - startX;
+    currentTranslate = prevTranslate + diff;
+    track.style.transform = `translateX(${currentTranslate}px)`;
+    track.style.transition = 'none';
+  });
+
+  track.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    track.style.transition = '';
+    
+    const slideWidth = slides[0].offsetWidth + 24;
+    const moved = currentTranslate - prevTranslate;
+    
+    if (moved < -slideWidth / 3 && currentIndex < maxIndex) {
+      currentIndex++;
+    } else if (moved > slideWidth / 3 && currentIndex > 0) {
+      currentIndex--;
+    }
+    
+    updateSlideshow();
+  });
+
+  track.addEventListener('mouseleave', () => {
+    if (isDragging) {
+      isDragging = false;
+      track.style.transition = '';
+      updateSlideshow();
+    }
+  });
+
+  // Auto-play
+  let autoPlayInterval = setInterval(() => {
+    if (currentIndex >= maxIndex) {
+      goToSlide(0);
+    } else {
+      nextSlide();
+    }
+  }, 5000);
+
+  // Pause on hover
+  container.addEventListener('mouseenter', () => {
+    clearInterval(autoPlayInterval);
+  });
+
+  container.addEventListener('mouseleave', () => {
+    autoPlayInterval = setInterval(() => {
+      if (currentIndex >= maxIndex) {
+        goToSlide(0);
+      } else {
+        nextSlide();
+      }
+    }, 5000);
+  });
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    const newSlidesToShow = getSlidesToShow();
+    if (newSlidesToShow !== slidesToShow) {
+      slidesToShow = newSlidesToShow;
+      maxIndex = Math.max(0, slides.length - slidesToShow);
+      if (currentIndex > maxIndex) currentIndex = maxIndex;
+      createDots();
+    }
+    updateSlideshow();
+  });
+
+  createDots();
+  updateSlideshow();
+}
+
+// ============================================
 // PROGRESS RAIL NAVIGATION
 // ============================================
 progressDots.forEach((dot, index) => {
   dot.addEventListener('click', () => {
-    const sections = ['act1', 'act2', 'act3'];
+    const sections = ['motherTribute', 'act1', 'act2', 'act3'];
     document.getElementById(sections[index]).scrollIntoView({ behavior: 'smooth' });
   });
 });
@@ -1431,7 +2154,7 @@ progressDots.forEach((dot, index) => {
 // SCROLL ANIMATIONS
 // ============================================
 function initScrollAnimations() {
-  // ---- Fade-in elements (text, headers, pull-quotes) ----
+  // ---- Fade-in elements ----
   gsap.utils.toArray('.fade-in').forEach((element) => {
     const parent = element.parentElement;
     const siblings = Array.from(parent.querySelectorAll(':scope > .fade-in, :scope > * > .fade-in'));
@@ -1456,21 +2179,54 @@ function initScrollAnimations() {
     );
   });
 
-  // ---- Masonry gallery items with stagger ----
-  document.querySelectorAll('.masonry-gallery').forEach(gallery => {
-    const items = gallery.querySelectorAll('.reveal-item');
+  // ---- Mother tribute special entrance ----
+  gsap.fromTo('.mother-image-frame',
+    { opacity: 0, scale: 0.85, y: 60, rotationY: 15 },
+    {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      rotationY: 0,
+      duration: 1.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.mother-tribute',
+        start: 'top 60%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+
+  gsap.fromTo('.mother-image-glow',
+    { opacity: 0, scale: 0.5 },
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.mother-tribute',
+        start: 'top 60%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+
+  // ---- Slideshow items with stagger ----
+  document.querySelectorAll('.slideshow-container').forEach(container => {
+    const items = container.querySelectorAll('.reveal-item');
     gsap.fromTo(items,
-      { opacity: 0, y: 70, scale: 0.94 },
+      { opacity: 0, y: 70, scale: 0.9 },
       {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 1.1,
-        stagger: 0.12,
+        duration: 1,
+        stagger: 0.1,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: gallery,
-          start: 'top 82%',
+          trigger: container,
+          start: 'top 80%',
           toggleActions: 'play none none none'
         }
       }
@@ -1495,7 +2251,7 @@ function initScrollAnimations() {
     }
   );
 
-  // ---- Eternal letter stanzas: slower, ethereal fade ----
+  // ---- Eternal letter stanzas ----
   gsap.utils.toArray('.eternal-letter .stanza, .eternal-letter .eternal-signature, .eternal-letter .eternal-header').forEach((element) => {
     gsap.fromTo(element,
       { opacity: 0, y: 40, filter: 'blur(10px)' },
@@ -1515,7 +2271,7 @@ function initScrollAnimations() {
   });
 
   // ---- Progress rail active states ----
-  const sectionIds = ['act1', 'act2', 'act3'];
+  const sectionIds = ['motherTribute', 'act1', 'act2', 'act3'];
   sectionIds.forEach((id, index) => {
     ScrollTrigger.create({
       trigger: `#${id}`,
@@ -1545,14 +2301,13 @@ function initScrollAnimations() {
     }
   });
 
-  // ---- Subtle parallax on masonry images ----
-  document.querySelectorAll('.masonry-item').forEach(item => {
-    const img = item.querySelector('img');
+  // ---- Subtle parallax on slide images ----
+  document.querySelectorAll('.slide-item img').forEach(img => {
     gsap.to(img, {
       yPercent: -8,
       ease: 'none',
       scrollTrigger: {
-        trigger: item,
+        trigger: img,
         start: 'top bottom',
         end: 'bottom top',
         scrub: 1.5
@@ -1560,7 +2315,19 @@ function initScrollAnimations() {
     });
   });
 
-  // ---- Act 3 glow subtle drift ----
+  // ---- Mother image parallax ----
+  gsap.to('.mother-image-frame img', {
+    yPercent: 5,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.mother-tribute',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1
+    }
+  });
+
+  // ---- Act 3 glow drift ----
   gsap.to('.act-three-glow', {
     x: '+=30',
     y: '+=20',
@@ -1570,7 +2337,11 @@ function initScrollAnimations() {
     ease: 'sine.inOut'
   });
 
-  // Refresh after setup
+  // ---- Initialize slideshows ----
+  document.querySelectorAll('.slideshow-container').forEach(container => {
+    initSlideshow(container);
+  });
+
   ScrollTrigger.refresh();
 }
 
@@ -1579,7 +2350,6 @@ function initScrollAnimations() {
 // ============================================
 gsap.set(mainContent, { opacity: 0 });
 
-// Handle window resize for ScrollTrigger
 window.addEventListener('resize', () => {
   ScrollTrigger.refresh();
 });
