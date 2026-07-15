@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Swag — A Love Letter in Three Acts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root {
+  --bg-deep: #0a0608;
+  --bg-warm: #14090c;
+  --bg-card: #1a0e11;
+  --text-primary: #f5ebd6;
+  --text-soft: #d4c4a8;
+  --text-muted: #8a7560;
+  --accent-gold: #d4a574;
+  --accent-rose: #c89b8a;
+  --accent-wine: #8b3a3a;
+  --border-soft: rgba(212, 165, 116, 0.15);
+  --border-warm: rgba(212, 165, 116, 0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+body.no-scroll { overflow: hidden; height: 100vh; }
+
+/* ===== Film grain texture ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+}
+
+/* ===== Cinematic vignette ===== */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ===== Preloader ===== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1a0e10 0%, #0a0608 40%, #15090c 70%, #0a0608 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  transition: opacity 1.5s ease;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.preloader::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.preloader-content {
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.preloader-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 2rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.preloader-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+
+.preloader-title .name {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent-gold);
+}
+
+.preloader-title .heart {
+  color: var(--accent-wine);
+  display: inline-block;
+  animation: heartbeat 1.4s ease-in-out infinite;
+  margin: 0 0.15em;
+  font-size: 0.85em;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+
+.preloader-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  margin: 2.5rem auto;
+}
+
+.preloader-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  font-style: italic;
+}
+
+.enter-btn {
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--text-primary);
+  padding: 1.1rem 3.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.5s ease, letter-spacing 0.5s ease;
+}
+
+.enter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gold);
+  transform: translateY(101%);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.enter-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.enter-btn:hover {
+  color: var(--bg-deep);
+  letter-spacing: 0.55em;
+}
+
+.enter-btn:hover::before {
+  transform: translateY(0);
+}
+
+.preloader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== Audio control ===== */
+.audio-control {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 100;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--border-warm);
+  background: rgba(10, 6, 8, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+.audio-control.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.audio-control:hover {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.audio-control:hover svg { fill: var(--bg-deep); }
+
+.audio-control svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--text-primary);
+  transition: fill 0.3s ease;
+}
+
+.audio-control .icon-pause { display: none; }
+.audio-control.playing .icon-play { display: none; }
+.audio-control.playing .icon-pause { display: block; }
+
+/* Equalizer animation when playing */
+.audio-control.playing::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-gold);
+  opacity: 0;
+  animation: ringPulse 2s ease-out infinite;
+}
+
+@keyframes ringPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ===== Progress indicator ===== */
+.progress-rail {
+  position: fixed;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  opacity: 0;
+  transition: opacity 1s ease 0.5s;
+}
+
+.progress-rail.visible { opacity: 1; }
+
+.progress-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.progress-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.progress-dot:hover::after { opacity: 1; }
+
+.progress-dot.active {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  transform: scale(1.4);
+}
+
+/* ===== Scroll progress bar ===== */
+.scroll-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-wine), var(--accent-gold));
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9997;
+}
+
+/* ===== Main content ===== */
+.main-content { opacity: 0; }
+
+section {
+  position: relative;
+  padding: 8rem 2rem;
+  min-height: 100vh;
+}
+
+/* ===== Section headers ===== */
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 5rem;
+}
+
+.section-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 1.2rem;
+  font-style: italic;
+  display: inline-block;
+  position: relative;
+}
+
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 1px;
+  background: var(--accent-gold);
+  opacity: 0.4;
+}
+
+.section-eyebrow::before { right: 100%; margin-right: 1rem; }
+.section-eyebrow::after { left: 100%; margin-left: 1rem; }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.section-intro {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: var(--text-soft);
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* ===== Act 1 ===== */
+.act-one {
+  background: 
+    radial-gradient(ellipse at top, rgba(139, 58, 58, 0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0608 0%, #120709 50%, #0a0608 100%);
+}
+
+.content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Masonry gallery */
+.masonry-gallery {
+  column-count: 3;
+  column-gap: 1rem;
+  margin: 4rem 0;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  cursor: pointer;
+  background: var(--bg-card);
+}
+
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 0.8s ease,
+              opacity 0.8s ease;
+  filter: brightness(0.82) saturate(0.85) contrast(1.05);
+}
+
+.masonry-item:hover img {
+  transform: scale(1.06);
+  filter: brightness(1) saturate(1.1) contrast(1);
+}
+
+.masonry-gallery:hover .masonry-item:not(:hover) img {
+  opacity: 0.45;
+  filter: brightness(0.4) saturate(0.5);
+}
+
+.masonry-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,6,8,0.7) 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.masonry-item:hover::after { opacity: 1; }
+
+.masonry-item .item-tag {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+
+.masonry-item:hover .item-tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Love letter text */
+.love-letter {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.letter-paragraph {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  line-height: 1.9;
+  color: var(--text-soft);
+  margin-bottom: 2rem;
+  font-weight: 400;
+  text-align: left;
+}
+
+.letter-paragraph:first-of-type {
+  font-size: 1.55rem;
+  text-align: center;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.letter-paragraph .accent {
+  color: var(--accent-gold);
+  font-style: italic;
+}
+
+.letter-paragraph .heart-emoji {
+  display: inline-block;
+  animation: heartbeat 1.4s ease-in-out infinite;
+}
+
+/* Pull quotes */
+.pull-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-style: italic;
+  color: var(--accent-gold);
+  text-align: center;
+  padding: 3rem 0;
+  line-height: 1.4;
+  position: relative;
+  max-width: 640px;
+  margin: 1rem auto;
+}
+
+.pull-quote::before {
+  content: '"';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 4rem;
+  color: var(--accent-gold);
+  opacity: 0.2;
+  line-height: 1;
+}
+
+.pull-quote span {
+  display: block;
+  width: 50px;
+  height: 1px;
+  background: var(--accent-gold);
+  margin: 2rem auto 0;
+  opacity: 0.4;
+}
+
+/* ===== Act 2 ===== */
+.act-two {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(139, 58, 58, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0608 0%, #0d0709 50%, #0a0608 100%);
+  position: relative;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  max-width: 1400px;
+  margin: 4rem auto;
+}
+
+.video-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-card);
+  cursor: pointer;
+  border: 1px solid var(--border-soft);
+  transition: border-color 0.4s ease, transform 0.4s ease;
+}
+
+.video-card:hover {
+  border-color: var(--border-warm);
+  transform: translateY(-4px);
+}
+
+.video-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-card video::-webkit-media-controls { display: none !important; }
+.video-card video::-webkit-media-controls-enclosure { display: none !important; }
+
+.video-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: opacity 0.6s ease, transform 1.2s ease;
+  filter: brightness(0.8) saturate(0.9);
+}
+
+.video-card:hover .video-poster {
+  transform: scale(1.05);
+  filter: brightness(0.95) saturate(1);
+}
+
+.video-card.playing .video-poster { opacity: 0; }
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,6,8,0.2) 0%, rgba(10,6,8,0.7) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: opacity 0.5s ease;
+}
+
+.video-card.playing .video-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.play-button {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: rgba(245, 235, 214, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.play-button::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-gold);
+  opacity: 0;
+  animation: playPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes playPulse {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.play-button svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--text-primary);
+  margin-left: 3px;
+  transition: fill 0.3s ease;
+}
+
+.video-card:hover .play-button {
+  background: var(--accent-gold);
+  transform: scale(1.1);
+}
+
+.video-card:hover .play-button svg { fill: var(--bg-deep); }
+
+.video-label {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  z-index: 3;
+  transition: opacity 0.4s ease;
+}
+
+.video-card.playing .video-label { opacity: 0; }
+
+.video-card .video-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(10, 6, 8, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.video-card.playing .video-close {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.video-close svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--text-primary);
+}
+
+/* Act 2 two-column text */
+.act-two-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  max-width: 1200px;
+  margin: 5rem auto 0;
+  align-items: start;
+}
+
+.act-two-text .letter-paragraph {
+  font-size: 1.2rem;
+  line-height: 1.85;
+}
+
+.act-two-text .letter-paragraph:first-of-type {
+  text-align: left;
+  font-size: 1.3rem;
+}
+
+/* ===== Act 3 ===== */
+.act-three {
+  background: radial-gradient(ellipse at center, #0d0709 0%, #050304 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 10rem 2rem;
+}
+
+/* Starfield */
+.act-three .stars {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(245,235,214,0.6), transparent),
+    radial-gradient(1px 1px at 60% 70%, rgba(212,165,116,0.5), transparent),
+    radial-gradient(1px 1px at 80% 20%, rgba(245,235,214,0.4), transparent),
+    radial-gradient(2px 2px at 30% 80%, rgba(212,165,116,0.5), transparent),
+    radial-gradient(1px 1px at 90% 50%, rgba(245,235,214,0.5), transparent),
+    radial-gradient(1px 1px at 10% 60%, rgba(212,165,116,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 70% 40%, rgba(245,235,214,0.4), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(212,165,116,0.5), transparent),
+    radial-gradient(1px 1px at 15% 45%, rgba(245,235,214,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 85% 85%, rgba(212,165,116,0.4), transparent),
+    radial-gradient(1px 1px at 40% 90%, rgba(245,235,214,0.5), transparent),
+    radial-gradient(1px 1px at 95% 15%, rgba(212,165,116,0.3), transparent);
+  background-size: 100% 100%;
+  animation: starDrift 120s linear infinite;
+}
+
+@keyframes starDrift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100px); }
+}
+
+.act-three .stars::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1px 1px at 25% 55%, rgba(245,235,214,0.4), transparent),
+    radial-gradient(1px 1px at 75% 25%, rgba(212,165,116,0.3), transparent),
+    radial-gradient(1px 1px at 55% 85%, rgba(245,235,214,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 35% 15%, rgba(212,165,116,0.4), transparent);
+  background-size: 100% 100%;
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+.act-three-glow {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.05) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: breathe 8s ease-in-out infinite;
+}
+
+.eternal-letter {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.eternal-header {
+  margin-bottom: 4rem;
+}
+
+.eternal-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-style: italic;
+  margin-bottom: 1rem;
+  display: inline-block;
+  position: relative;
+}
+
+.eternal-subtitle::before,
+.eternal-subtitle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 1px;
+  background: var(--accent-gold);
+  opacity: 0.4;
+}
+
+.eternal-subtitle::before { right: 100%; margin-right: 1rem; }
+.eternal-subtitle::after { left: 100%; margin-left: 1rem; }
+
+.eternal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.eternal-divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  margin: 2.5rem auto;
+}
+
+.stanza {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  line-height: 2.1;
+  color: var(--text-soft);
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: 0.005em;
+}
+
+.stanza.emphasis {
+  font-style: italic;
+  color: var(--accent-gold);
+  font-size: 1.45rem;
+  line-height: 1.8;
+  margin: 3rem 0;
+}
+
+.stanza:first-of-type {
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+.eternal-signature {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border-soft);
+  position: relative;
+}
+
+.eternal-signature::before {
+  content: '✦';
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-deep);
+  padding: 0 1rem;
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+}
+
+.signature-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.signature-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border-soft);
+  position: relative;
+}
+
+.footer-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+}
+
+.footer-heart {
+  color: var(--accent-wine);
+  display: inline-block;
+  animation: heartbeat 1.4s ease-in-out infinite;
+  margin: 0 0.2em;
+}
+
+/* ===== Initial hidden state for animated elements ===== */
+.fade-in {
+  opacity: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .masonry-gallery { column-count: 2; }
+  .video-grid { grid-template-columns: repeat(2, 1fr); }
+  .act-two-content { grid-template-columns: 1fr; gap: 2rem; }
+  .progress-rail { display: none; }
+}
+
+@media (max-width: 640px) {
+  section { padding: 5rem 1.25rem; }
+  .masonry-gallery { column-count: 1; }
+  .video-grid { grid-template-columns: 1fr; }
+  .video-card { aspect-ratio: 4 / 5; }
+  .letter-paragraph { font-size: 1.15rem; line-height: 1.8; }
+  .letter-paragraph:first-of-type { font-size: 1.25rem; }
+  .stanza { font-size: 1.15rem; line-height: 1.9; }
+  .stanza.emphasis { font-size: 1.2rem; }
+  .audio-control { top: 1rem; right: 1rem; width: 40px; height: 40px; }
+  .section-header { margin-bottom: 3rem; }
+  .pull-quote { font-size: 1.3rem; padding: 2rem 0; }
+  .act-two-text .letter-paragraph { font-size: 1.1rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body class="no-scroll">
+
+<!-- ===== Scroll progress bar ===== -->
+<div class="scroll-bar" id="scrollBar"></div>
+
+<!-- ===== Preloader ===== -->
+<div class="preloader" id="preloader">
+  <div class="preloader-content">
+    <p class="preloader-eyebrow">A Cinematic Love Letter</p>
+    <h1 class="preloader-title">
+      I love you<span class="heart">❤</span><span class="name">Swag</span>
+    </h1>
+    <div class="preloader-divider"></div>
+    <p class="preloader-subtitle">Press play to begin</p>
+    <button class="enter-btn" id="enterBtn"><span>Enter</span></button>
+  </div>
+</div>
+
+<!-- ===== Audio ===== -->
+<audio id="bgAudio" loop preload="auto">
+  <!-- Replace this source with your preferred romantic track -->
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===== Audio control ===== -->
+<button class="audio-control" id="audioControl" aria-label="Toggle background music">
+  <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</button>
+
+<!-- ===== Progress rail ===== -->
+<div class="progress-rail" id="progressRail">
+  <div class="progress-dot active" data-section="0" data-label="Act One — Celebration"></div>
+  <div class="progress-dot" data-section="1" data-label="Act Two — The Real Him"></div>
+  <div class="progress-dot" data-section="2" data-label="Act Three — Eternal Love"></div>
+</div>
+
+<!-- ===== Main content ===== -->
+<main class="main-content" id="mainContent">
+
+  <!-- ============================================ -->
+  <!-- ACT 1: THE CELEBRATION                       -->
+  <!-- ============================================ -->
+  <section class="act-one" id="act1">
+    <div class="content-wrapper">
+      <div class="section-header">
+        <p class="section-eyebrow fade-in">Act One</p>
+        <h2 class="section-title fade-in">The Celebration</h2>
+        <p class="section-intro fade-in">For the one who makes every ordinary moment feel like cinema.</p>
+      </div>
+
+      <!-- Masonry batch 1 -->
+      <div class="masonry-gallery">
+        <div class="masonry-item reveal-item"><img src="image.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 01</span></div>
+        <div class="masonry-item reveal-item"><img src="image17.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 02</span></div>
+        <div class="masonry-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 03</span></div>
+        <div class="masonry-item reveal-item"><img src="image12.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 04</span></div>
+        <div class="masonry-item reveal-item"><img src="image13.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 05</span></div>
+        <div class="masonry-item reveal-item"><img src="image14.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 06</span></div>
+      </div>
+
+      <!-- Letter part 1 -->
+      <div class="love-letter">
+        <p class="letter-paragraph fade-in">Happy Birthday, my love. <span class="heart-emoji">❤️</span> Today is all about celebrating you, and I just want you to know how grateful I am for every beautiful moment we've shared together.</p>
+
+        <p class="letter-paragraph fade-in">One thing I've always loved about us is who we are when we're happy. Those moments remind me why I enjoy being around you so much.</p>
+
+        <p class="letter-paragraph fade-in">I love that we can spend hours together and it never feels boring. Whether we're talking, laughing, teasing each other, or doing absolutely nothing, somehow it's always enough because it's with you.</p>
+
+        <p class="letter-paragraph fade-in">I love how you compliment me and make me feel beautiful in your own way. I love our random conversations, our inside jokes, the little things that only we understand, and how naturally we connect when everything is okay between us.</p>
+
+        <p class="letter-paragraph fade-in">Those are some of my favorite memories, and they're moments I'll always cherish.</p>
+      </div>
+
+      <!-- Masonry batch 2 -->
+      <div class="masonry-gallery">
+        <div class="masonry-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 07</span></div>
+        <div class="masonry-item reveal-item"><img src="image111.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 08</span></div>
+        <div class="masonry-item reveal-item"><img src="image112.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 09</span></div>
+        <div class="masonry-item reveal-item"><img src="image113.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 10</span></div>
+        <div class="masonry-item reveal-item"><img src="image114.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 11</span></div>
+        <div class="masonry-item reveal-item"><img src="image11.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 12</span></div>
+      </div>
+
+      <!-- Letter part 2 -->
+      <div class="love-letter">
+        <p class="letter-paragraph fade-in">Life and relationships aren't perfect, and we've definitely had our share of difficult days. But I hope you'll always remember that beyond the disagreements, there has also been genuine laughter, real friendship, and so many moments that made my heart happy.</p>
+
+        <p class="letter-paragraph fade-in">I truly love the version of us that smiles together, supports each other, and simply enjoys each other's company.</p>
+
+        <div class="pull-quote fade-in">
+          As you begin this new year of your life, I pray that God blesses you beyond your expectations.
+          <span></span>
+        </div>
+
+        <p class="letter-paragraph fade-in">May He protect you, grant you peace, wisdom, good health, and success in everything you do. I pray your dreams become reality and that this new chapter brings you more joy than you've ever imagined.</p>
+
+        <p class="letter-paragraph fade-in">Thank you for being someone I've shared so many memories with. Thank you for every laugh, every compliment, every late-night conversation, every hug, and every moment that made me feel close to you.</p>
+
+        <p class="letter-paragraph fade-in">Happy birthday once again. I hope today reminds you of how special you are. Keep smiling, keep chasing your dreams, and never stop being the amazing person I know you can be.</p>
+
+        <p class="letter-paragraph fade-in">I love you, and I'll always be rooting for you. Happy Birthday, my very own albino. <span class="accent">😂 ❤️🎂</span></p>
+      </div>
+
+      <!-- Masonry batch 3 -->
+      <div class="masonry-gallery">
+        <div class="masonry-item reveal-item"><img src="image10.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 13</span></div>
+        <div class="masonry-item reveal-item"><img src="image15.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 14</span></div>
+        <div class="masonry-item reveal-item"><img src="image16.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 15</span></div>
+        <div class="masonry-item reveal-item"><img src="image18.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 16</span></div>
+        <div class="masonry-item reveal-item"><img src="image19.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 17</span></div>
+        <div class="masonry-item reveal-item"><img src="image13.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 18</span></div>
+        <div class="masonry-item reveal-item"><img src="image17.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 19</span></div>
+        <div class="masonry-item reveal-item"><img src="image.jpg" alt="Memory" loading="lazy"><span class="item-tag">Us, 20</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- ACT 2: THE REAL HIM                          -->
+  <!-- ============================================ -->
+  <section class="act-two" id="act2">
+    <div class="section-header">
+      <p class="section-eyebrow fade-in">Act Two</p>
+      <h2 class="section-title fade-in">The Real Him</h2>
+      <p class="section-intro fade-in">Beneath the surface, beyond the name — the man only a few get to truly know.</p>
+    </div>
+
+    <!-- Video grid -->
+    <div class="video-grid">
+      <div class="video-card reveal-item">
+        <img class="video-poster" src="image.jpg" alt="Moment 01">
+        <video preload="none" playsinline>
+          <source src="video1.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="play-button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="video-label">Moment 01</div>
+        <div class="video-close"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>
+      </div>
+      <div class="video-card reveal-item">
+        <img class="video-poster" src="image11.jpg" alt="Moment 02">
+        <video preload="none" playsinline>
+          <source src="video2.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="play-button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="video-label">Moment 02</div>
+        <div class="video-close"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>
+      </div>
+      <div class="video-card reveal-item">
+        <img class="video-poster" src="image12.jpg" alt="Moment 03">
+        <video preload="none" playsinline>
+          <source src="video3.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="play-button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="video-label">Moment 03</div>
+        <div class="video-close"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>
+      </div>
+      <div class="video-card reveal-item">
+        <img class="video-poster" src="image14.jpg" alt="Moment 04">
+        <video preload="none" playsinline>
+          <source src="video4.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="play-button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="video-label">Moment 04</div>
+        <div class="video-close"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>
+      </div>
+      <div class="video-card reveal-item">
+        <img class="video-poster" src="image17.jpg" alt="Moment 05">
+        <video preload="none" playsinline>
+          <source src="video5.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="play-button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="video-label">Moment 05</div>
+        <div class="video-close"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>
+      </div>
+      <div class="video-card reveal-item">
+        <img class="video-poster" src="image10.jpg" alt="Moment 06">
+        <video preload="none" playsinline>
+          <source src="video6.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="play-button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="video-label">Moment 06</div>
+        <div class="video-close"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>
+      </div>
+    </div>
+
+    <!-- Two-column text -->
+    <div class="act-two-content">
+      <div class="act-two-text">
+        <p class="letter-paragraph fade-in">As much as Swag can be incredibly annoying sometimes, one thing I've learned is that beneath all of that is one of the sweetest and most caring people I know.</p>
+
+        <p class="letter-paragraph fade-in">He likes to act nonchalant and unbothered, and honestly, that's one of the things that drives me crazy the most, but if you pay attention, you'll see that his actions always speak louder than whatever image he's trying to maintain.</p>
+
+        <p class="letter-paragraph fade-in">I knew Swag was special during one of the most difficult periods of my life. I was battling serious health challenges, carrying fears and worries that I couldn't even bring myself to share with family or friends. In a season when I felt alone, he showed up for me.</p>
+
+        <p class="letter-paragraph fade-in">He was there emotionally, financially, and mentally. Even when he traveled, he never stopped checking up on me. Not a day went by without him making sure I was okay. In those moments, I saw a side of him that many people don't get to see, and that's when I knew how much he genuinely cared.</p>
+
+        <p class="letter-paragraph fade-in">One thing I admire about him is how protective he is of the people he loves. He would never sit back and allow someone speak carelessly about his woman. I love how proud he is of me, how he celebrates me, and how he never makes me feel like I'm too much to love.</p>
+
+        <div class="pull-quote fade-in">
+          What I love most about us is that somehow, we always find our way back to each other.
+          <span></span>
+        </div>
+
+        <p class="letter-paragraph fade-in">There is something beautiful about that. It reminds me that some connections are stronger than pride, stronger than anger, and stronger than temporary disagreements.</p>
+      </div>
+
+      <div class="act-two-text">
+        <p class="letter-paragraph fade-in">To know Swag is truly to love him. People often judge him based on what they see on the surface, but there is so much more to him than that.</p>
+
+        <p class="letter-paragraph fade-in">Yes, he can be frustrating with his words sometimes, but his heart is rarely where his words accidentally land. He feels deeply, cares deeply, and loves deeply, even when he struggles to express it perfectly.</p>
+
+        <p class="letter-paragraph fade-in">One thing that deserves recognition is how much he has worked on himself. I've watched him grow, especially with his anger. The progress he's made is something I'm genuinely proud of. Sometimes I even push his buttons just to see how far he's come, and every time, I'm reminded that growth is possible for people who are willing to put in the work.</p>
+
+        <p class="letter-paragraph fade-in">I also admire how family-oriented he is. No matter what people think they know about 'DJ Swag,' the truth is that the real him is disciplined, focused, hardworking, and intentional. To truly know him, you have to look beyond the name, the crowd, and the image.</p>
+
+        <p class="letter-paragraph fade-in">The real Swag is someone who takes responsibility seriously and carries the people he loves in his heart. And if there's one thing I want him to know, it's this: <span class="accent">I love him deeply.</span> Not because he's perfect, but because I've seen the parts of him that many people never get the privilege of seeing.</p>
+
+        <p class="letter-paragraph fade-in">I've seen his kindness, his loyalty, his growth, his strength, and his heart. I pray that God blesses him abundantly and grants him everything he has worked and prayed for. I pray he gets his own space, that Swagyard grows beyond his imagination, and that every dream he carries in his heart becomes a reality.</p>
+
+        <p class="letter-paragraph fade-in">He deserves happiness, peace, success, and all the beautiful things life has to offer. Some people are easy to like, but rare people are impossible to forget. <span class="accent">Swag is one of those people.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- ACT 3: ETERNAL LOVE                          -->
+  <!-- ============================================ -->
+  <section class="act-three" id="act3">
+    <div class="stars"></div>
+    <div class="act-three-glow"></div>
+
+    <div class="eternal-letter">
+      <div class="eternal-header fade-in">
+        <p class="eternal-subtitle">Act Three</p>
+        <h2 class="eternal-title">Eternal Love</h2>
+        <div class="eternal-divider"></div>
+      </div>
+
+      <p class="stanza fade-in">My dearest son, Matero Jude Adurojaye.</p>
+
+      <p class="stanza fade-in">If heaven could grant me just one moment with you today, I wouldn't spend it talking about the years we've lost. I'd spend it reminding you how deeply you are loved.</p>
+
+      <p class="stanza emphasis fade-in">Happy birthday, my son.</p>
+
+      <p class="stanza fade-in">I have watched you grow through every smile, every tear, every victory, and every battle. Even when you couldn't see me, my love has never stopped surrounding you.</p>
+
+      <p class="stanza fade-in">My prayer for you is simple: May God go before you in every step you take. May He protect you from harm, guide every decision you make, and bless the work of your hands.</p>
+
+      <p class="stanza fade-in">May your heart never lose its kindness, your faith never grow weak, and your light never be dimmed by the hardships of life.</p>
+
+      <p class="stanza emphasis fade-in">When you feel lonely, may you remember that love never dies. It simply changes its home. Mine now lives in heaven, but it will always find its way back to you.</p>
+
+      <p class="stanza fade-in">May doors open where others see walls. May you laugh more than you cry, celebrate more than you worry, and find peace even in life's storms.</p>
+
+      <p class="stanza fade-in">I pray that the dreams you carry become your reality, that God surrounds you with people who genuinely love you, and that He gives you a long, healthy, and beautiful life.</p>
+
+      <p class="stanza fade-in">And whenever you miss me, don't let your heart be filled only with tears. Smile, because being your mother will always be one of my greatest blessings.</p>
+
+      <p class="stanza emphasis fade-in">Happy birthday, my precious son. May the Lord continue to keep you, strengthen you, and remind you every day that you are deeply loved.</p>
+
+      <div class="eternal-signature fade-in">
+        <p class="signature-name">With a mother's endless love,</p>
+        <p class="signature-tag">Forever watching over you</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <p class="footer-text">Crafted frame by frame, with love <span class="footer-heart">❤</span> For Swag</p>
+  </footer>
+
+</main>
+
+<script>
+// ============================================
+// GSAP SETUP
+// ============================================
+gsap.registerPlugin(ScrollTrigger);
+
+const preloader = document.getElementById('preloader');
+const enterBtn = document.getElementById('enterBtn');
+const bgAudio = document.getElementById('bgAudio');
+const audioControl = document.getElementById('audioControl');
+const mainContent = document.getElementById('mainContent');
+const progressRail = document.getElementById('progressRail');
+const progressDots = document.querySelectorAll('.progress-dot');
+const scrollBar = document.getElementById('scrollBar');
+
+// ============================================
+// PRELOADER ENTRANCE ANIMATION
+// ============================================
+const tl = gsap.timeline({ delay: 0.3 });
+tl.from('.preloader-eyebrow', { opacity: 0, y: 20, duration: 1, ease: 'power2.out' })
+  .from('.preloader-title', { opacity: 0, y: 30, duration: 1.4, ease: 'power3.out' }, '-=0.6')
+  .from('.preloader-divider', { scaleX: 0, duration: 1, ease: 'power2.out' }, '-=0.8')
+  .from('.preloader-subtitle', { opacity: 0, y: 15, duration: 0.9, ease: 'power2.out' }, '-=0.6')
+  .from('.enter-btn', { opacity: 0, y: 20, duration: 1, ease: 'power2.out' }, '-=0.5');
+
+// ============================================
+// ENTER BUTTON HANDLER
+// ============================================
+enterBtn.addEventListener('click', () => {
+  // Fade out preloader
+  gsap.to(preloader, {
+    opacity: 0,
+    duration: 1.5,
+    ease: 'power2.inOut',
+    onStart: () => {
+      preloader.style.pointerEvents = 'none';
+    },
+    onComplete: () => {
+      preloader.style.display = 'none';
+      document.body.classList.remove('no-scroll');
+    }
+  });
+
+  // Play audio with fade-in
+  bgAudio.volume = 0;
+  const playPromise = bgAudio.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      gsap.to(bgAudio, { volume: 0.45, duration: 3, ease: 'power2.out' });
+      audioControl.classList.add('playing');
+    }).catch(err => {
+      console.warn('Audio autoplay blocked:', err);
+    });
+  }
+  audioControl.classList.add('visible');
+  progressRail.classList.add('visible');
+
+  // Reveal main content
+  gsap.to(mainContent, {
+    opacity: 1,
+    duration: 2,
+    ease: 'power2.out',
+    delay: 0.4
+  });
+
+  // Initialize scroll animations after content is visible
+  setTimeout(initScrollAnimations, 600);
+});
+
+// ============================================
+// AUDIO TOGGLE
+// ============================================
+audioControl.addEventListener('click', () => {
+  if (bgAudio.paused) {
+    bgAudio.play();
+    audioControl.classList.add('playing');
+    gsap.to(bgAudio, { volume: 0.45, duration: 1.2, ease: 'power2.out' });
+  } else {
+    gsap.to(bgAudio, {
+      volume: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      onComplete: () => bgAudio.pause()
+    });
+    audioControl.classList.remove('playing');
+  }
+});
+
+// ============================================
+// VIDEO CARD INTERACTIONS
+// ============================================
+function lowerMusicForVideo() {
+  gsap.to(bgAudio, { volume: 0.12, duration: 0.6, ease: 'power2.out' });
+}
+
+function restoreMusic() {
+  if (audioControl.classList.contains('playing')) {
+    gsap.to(bgAudio, { volume: 0.45, duration: 0.8, ease: 'power2.out' });
+  }
+}
+
+document.querySelectorAll('.video-card').forEach(card => {
+  const video = card.querySelector('video');
+  const closeBtn = card.querySelector('.video-close');
+
+  function playVideo() {
+    // Pause all other videos
+    document.querySelectorAll('.video-card').forEach(other => {
+      if (other !== card) {
+        const v = other.querySelector('video');
+        v.pause();
+        v.currentTime = 0;
+        other.classList.remove('playing');
+      }
+    });
+    video.play();
+    card.classList.add('playing');
+    lowerMusicForVideo();
+  }
+
+  function pauseVideo() {
+    video.pause();
+    card.classList.remove('playing');
+    restoreMusic();
+  }
+
+  card.addEventListener('click', (e) => {
+    // If clicking close button, handle separately
+    if (e.target.closest('.video-close')) {
+      e.stopPropagation();
+      pauseVideo();
+      return;
+    }
+    if (video.paused) {
+      playVideo();
+    } else {
+      pauseVideo();
+    }
+  });
+
+  video.addEventListener('ended', () => {
+    card.classList.remove('playing');
+    restoreMusic();
+  });
+});
+
+// ============================================
+// PROGRESS RAIL NAVIGATION
+// ============================================
+progressDots.forEach((dot, index) => {
+  dot.addEventListener('click', () => {
+    const sections = ['act1', 'act2', 'act3'];
+    document.getElementById(sections[index]).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ============================================
+// SCROLL ANIMATIONS
+// ============================================
+function initScrollAnimations() {
+  // ---- Fade-in elements (text, headers, pull-quotes) ----
+  gsap.utils.toArray('.fade-in').forEach((element) => {
+    const parent = element.parentElement;
+    const siblings = Array.from(parent.querySelectorAll(':scope > .fade-in, :scope > * > .fade-in'));
+    const index = siblings.indexOf(element);
+    const delay = index >= 0 ? Math.min(index * 0.08, 0.3) : 0;
+
+    gsap.fromTo(element,
+      { opacity: 0, y: 50, filter: 'blur(6px)' },
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 1.4,
+        delay: delay,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: element,
+          start: 'top 88%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+  });
+
+  // ---- Masonry gallery items with stagger ----
+  document.querySelectorAll('.masonry-gallery').forEach(gallery => {
+    const items = gallery.querySelectorAll('.reveal-item');
+    gsap.fromTo(items,
+      { opacity: 0, y: 70, scale: 0.94 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1.1,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: gallery,
+          start: 'top 82%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+  });
+
+  // ---- Video grid stagger ----
+  gsap.fromTo('.video-card',
+    { opacity: 0, y: 70, scale: 0.94 },
+    {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 1.1,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.video-grid',
+        start: 'top 82%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+
+  // ---- Eternal letter stanzas: slower, ethereal fade ----
+  gsap.utils.toArray('.eternal-letter .stanza, .eternal-letter .eternal-signature, .eternal-letter .eternal-header').forEach((element) => {
+    gsap.fromTo(element,
+      { opacity: 0, y: 40, filter: 'blur(10px)' },
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 2.2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: element,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+  });
+
+  // ---- Progress rail active states ----
+  const sectionIds = ['act1', 'act2', 'act3'];
+  sectionIds.forEach((id, index) => {
+    ScrollTrigger.create({
+      trigger: `#${id}`,
+      start: 'top 40%',
+      end: 'bottom 40%',
+      onToggle: self => {
+        if (self.isActive) {
+          progressDots.forEach(d => d.classList.remove('active'));
+          progressDots[index].classList.add('active');
+        }
+      }
+    });
+  });
+
+  // ---- Scroll progress bar ----
+  ScrollTrigger.create({
+    trigger: 'body',
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: self => {
+      gsap.to(scrollBar, {
+        scaleX: self.progress,
+        duration: 0.3,
+        ease: 'power2.out',
+        overwrite: true
+      });
+    }
+  });
+
+  // ---- Subtle parallax on masonry images ----
+  document.querySelectorAll('.masonry-item').forEach(item => {
+    const img = item.querySelector('img');
+    gsap.to(img, {
+      yPercent: -8,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: item,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.5
+      }
+    });
+  });
+
+  // ---- Act 3 glow subtle drift ----
+  gsap.to('.act-three-glow', {
+    x: '+=30',
+    y: '+=20',
+    duration: 8,
+    repeat: -1,
+    yoyo: true,
+    ease: 'sine.inOut'
+  });
+
+  // Refresh after setup
+  ScrollTrigger.refresh();
+}
+
+// ============================================
+// ENSURE INITIAL STATE
+// ============================================
+gsap.set(mainContent, { opacity: 0 });
+
+// Handle window resize for ScrollTrigger
+window.addEventListener('resize', () => {
+  ScrollTrigger.refresh();
+});
+</script>
+
+</body>
+</html>
